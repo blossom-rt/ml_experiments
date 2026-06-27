@@ -1,0 +1,18 @@
+# Part 1 — 传统机器学习
+
+numpy>=1.24.0
+pandas>=1.5.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+scikit-learn>=1.3.0
+
+# Part 2 — CNN 手写数字识别 (PyTorch MNIST)
+
+torch>=2.0.0
+torchvision>=0.15.0
+Pillow>=10.0.0
+tensorboard>=2.13.0
+
+# Part 2 — 可选: 加速 IDX 文件解析
+
+# idx2numpy

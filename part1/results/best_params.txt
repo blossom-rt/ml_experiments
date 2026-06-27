@@ -1,0 +1,35 @@
+GridSearchCV Best Parameters
+
+[SVM]
+  Best CV Score (accuracy): 0.9711
+  C = 1000
+  gamma = 0.1
+  kernel = rbf
+
+[RF]
+  Best CV Score (accuracy): 0.9123
+  bootstrap = True
+  max_depth = None
+  max_features = sqrt
+  n_estimators = 200
+
+[KNN]
+  Best CV Score (accuracy): 0.8923
+  metric = manhattan
+  n_neighbors = 31
+  weights = distance
+
+[GB]
+  Best CV Score (accuracy): 0.9288
+  learning_rate = 0.2
+  max_depth = 5
+  max_features = log2
+  n_estimators = 200
+
+[DT]
+  Best CV Score (accuracy): 0.8456
+  criterion = gini
+  max_depth = 10
+  min_samples_leaf = 2
+  min_samples_split = 2
+
