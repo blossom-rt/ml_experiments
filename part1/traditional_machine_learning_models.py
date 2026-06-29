@@ -639,7 +639,7 @@ def save_best_params(best_params, best_scores, filename):
 
 def main():
     print("  论文复现实验 - Anomaly Detection for Oil & Gas Pipelines")
-    print("  阶段一：传统机器学习（SVM, RF, KNN, GB, DT）")
+    print("  传统机器学习（SVM, RF, KNN, GB, DT）")
 
     # 1. 数据预处理
     X_train, X_test, y_train, y_test, feature_cols, scaler = load_and_preprocess()
