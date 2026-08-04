@@ -37,7 +37,7 @@ cd part1
 python traditional_machine_learning_models.py
 ```
 
-**数据集**（`part1/generated_dataset.csv`）：10,291 条样本，8 个特征 — 井口温度、井口压力、天然气/石油/水产率、BSW 含水率、CO₂ 摩尔分数、气体密度。目标值为腐蚀速率（CR）。
+**数据集**（`part1/generated_dataset.csv`）：10,292 条样本，8 个特征 — 井口温度、井口压力、天然气/石油/水产率、BSW 含水率、CO₂ 摩尔分数、气体密度。目标值为腐蚀速率（CR）。
 
 ---
 
