@@ -49,8 +49,8 @@ python traditional_machine_learning_models.py
 
 ```
 ImprovedCNN（871K 参数）
-├─ 卷积块 1：Conv(1→32) → BN → ReLU → Conv(32→32) → BN → ReLU → MaxPool → Dropout(0.25)
-├─ 卷积块 2：Conv(32→64) → BN → ReLU → Conv(64→64) → BN → ReLU → MaxPool → Dropout(0.25)
+├─ 卷积块 1：Conv(1→32) → BN → ReLU → Conv(32→32) → BN → ReLU → MaxPool → Dropout2d(0.25)
+├─ 卷积块 2：Conv(32→64) → BN → ReLU → Conv(64→64) → BN → ReLU → MaxPool → Dropout2d(0.25)
 └─ 分类器：   FC(3136→256) → BN → ReLU → Dropout(0.5) → FC(256→10)
 ```
 

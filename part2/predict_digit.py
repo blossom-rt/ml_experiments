@@ -32,7 +32,7 @@ if _cn_font:
     plt.rcParams["axes.unicode_minus"] = False
 
 # ---------------------------------------------------------------------------
-# 1. 模型定义（必须与 test.py 中完全一致）
+# 1. 模型定义（必须与 cnn_training.py 中完全一致）
 # ---------------------------------------------------------------------------
 class ImprovedCNN(nn.Module):
     """改进的CNN模型：添加BatchNorm + Dropout + 更深的卷积层"""
@@ -123,7 +123,7 @@ def predict(image_path, model_path="best_mnist_cnn.pth"):
     model = ImprovedCNN().to(device)
     if not os.path.exists(model_path):
         print(f"[错误] 模型文件不存在: {model_path}")
-        print("请先运行 test.py 训练模型，或确保 best_mnist_cnn.pth 在当前目录")
+        print("请先运行 cnn_training.py 训练模型，或确保 best_mnist_cnn.pth 在当前目录")
         sys.exit(1)
 
     model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
