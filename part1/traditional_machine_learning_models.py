@@ -19,13 +19,14 @@ matplotlib.use('Agg')  # 非交互后端
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.preprocessing import MinMaxScaler, label_binarize
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
+    precision_recall_fscore_support,
     confusion_matrix,
     roc_curve, auc, roc_auc_score,
     precision_recall_curve
@@ -181,8 +182,12 @@ def build_tuned_models(best_params):
 
 # 3. 模型训练与评估
 
-def evaluate_model(model, X_test, y_test):
-    """计算所有评估指标（含加权平均和 per-class）"""
+def evaluate_model(model, X_test, y_test, class_labels=(0, 1), class_names=('Low', 'High')):
+    """计算所有评估指标（含加权平均和 per-class）
+
+    class_labels: 实际类别值，默认 (0, 1)
+    class_names:  类别显示名，默认 ('Low', 'High')，用于 per-class 指标键名
+    """
     y_pred = model.predict(X_test)
     y_prob = model.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else None
 
@@ -191,19 +196,19 @@ def evaluate_model(model, X_test, y_test):
         'Precision':  precision_score(y_test, y_pred, average='weighted'),
         'Recall':     recall_score(y_test, y_pred, average='weighted'),
         'F1-Score':   f1_score(y_test, y_pred, average='weighted'),
-        # Per-class 指标（class 0 = Low corrosion, class 1 = High corrosion）
-        'Precision_Low':  precision_score(y_test, y_pred, average=None, labels=[0])[0],
-        'Recall_Low':     recall_score(y_test, y_pred, average=None, labels=[0])[0],
-        'F1_Low':         f1_score(y_test, y_pred, average=None, labels=[0])[0],
-        'Precision_High': precision_score(y_test, y_pred, average=None, labels=[1])[0],
-        'Recall_High':    recall_score(y_test, y_pred, average=None, labels=[1])[0],
-        'F1_High':        f1_score(y_test, y_pred, average=None, labels=[1])[0],
     }
 
+    # Per-class 指标（class 0 = Low corrosion, class 1 = High corrosion）
+    prec, rec, f1, _ = precision_recall_fscore_support(
+        y_test, y_pred, average=None, labels=list(class_labels))
+    for i, name in enumerate(class_names):
+        metrics[f'Precision_{name}']  = prec[i]
+        metrics[f'Recall_{name}']     = rec[i]
+        metrics[f'F1_{name}']         = f1[i]
+
     if y_prob is not None:
-        # Micro-average ROC-AUC
-        y_bin = label_binarize(y_test, classes=[0, 1])
-        metrics['ROC-AUC'] = roc_auc_score(y_bin, y_prob, average='micro')
+        # 二分类可直接用 y_test + 正类概率计算 ROC-AUC
+        metrics['ROC-AUC'] = roc_auc_score(y_test, y_prob)
     else:
         metrics['ROC-AUC'] = np.nan
 

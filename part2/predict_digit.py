@@ -43,14 +43,14 @@ class ImprovedCNN(nn.Module):
         self.conv2 = nn.Conv2d(32, 32, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(32)
         self.pool1 = nn.MaxPool2d(2, 2)
-        self.dropout1 = nn.Dropout2d(0.25)
+        self.dropout1 = nn.Dropout(0.25)
 
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.bn3 = nn.BatchNorm2d(64)
         self.conv4 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
         self.bn4 = nn.BatchNorm2d(64)
         self.pool2 = nn.MaxPool2d(2, 2)
-        self.dropout2 = nn.Dropout2d(0.25)
+        self.dropout2 = nn.Dropout(0.25)
 
         self.fc1 = nn.Linear(64 * 7 * 7, 256)
         self.bn_fc = nn.BatchNorm1d(256)

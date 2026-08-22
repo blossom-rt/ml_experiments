@@ -40,15 +40,18 @@ torchvision.datasets.MNIST.resources = [
     ("https://storage.googleapis.com/cvdf-datasets/mnist/t10k-labels-idx1-ubyte.gz", None),
 ]
 
-train_dataset = datasets.MNIST(
-    root='./data', train=True, download=True, transform=train_transform
-)
-test_dataset = datasets.MNIST(
-    root='./data', train=False, download=True, transform=test_transform
-)
-
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False)
+# 3. 数据加载（首次运行自动下载 MNIST；包成函数以免 import 时触发下载）
+def load_data():
+    """加载 MNIST 数据集并返回 train/test DataLoader"""
+    train_dataset = datasets.MNIST(
+        root='./data', train=True, download=True, transform=train_transform
+    )
+    test_dataset = datasets.MNIST(
+        root='./data', train=False, download=True, transform=test_transform
+    )
+    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False)
+    return train_loader, test_loader
 
 # 3. 定义CNN模型（增强版）
 class ImprovedCNN(nn.Module):
@@ -61,7 +64,7 @@ class ImprovedCNN(nn.Module):
         self.conv2 = nn.Conv2d(32, 32, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(32)
         self.pool1 = nn.MaxPool2d(2, 2)                  # 28→14
-        self.dropout1 = nn.Dropout2d(0.25)               # 空间Dropout：防止过拟合
+        self.dropout1 = nn.Dropout(0.25)                  # Dropout：防止过拟合
 
         # 卷积块2
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
@@ -69,7 +72,7 @@ class ImprovedCNN(nn.Module):
         self.conv4 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
         self.bn4 = nn.BatchNorm2d(64)
         self.pool2 = nn.MaxPool2d(2, 2)                  # 14→7
-        self.dropout2 = nn.Dropout2d(0.25)
+        self.dropout2 = nn.Dropout(0.25)
 
         # 全连接层
         self.fc1 = nn.Linear(64 * 7 * 7, 256)
@@ -113,11 +116,6 @@ scheduler = optim.lr_scheduler.ReduceLROnPlateau(
 
 # 初始化TensorBoard，日志存在./runs/mnist_cnn_improved里
 writer = SummaryWriter(log_dir='./runs/mnist_cnn_improved')
-
-# 把模型结构写入TensorBoard（用一批数据做示例）
-example_data, example_targets = next(iter(train_loader))
-example_data = example_data.to(device)
-writer.add_graph(model, example_data)
 
 # 5. 训练循环
 def train(model, device, train_loader, criterion, optimizer, epoch):
@@ -169,6 +167,14 @@ def test(model, device, test_loader, criterion, epoch):
 
 # 7. 开始训练
 if __name__ == "__main__":
+    # 加载数据（首次运行会自动下载 MNIST）
+    train_loader, test_loader = load_data()
+
+    # 把模型结构写入 TensorBoard（用一批数据做示例）
+    example_data, _ = next(iter(train_loader))
+    example_data = example_data.to(device)
+    writer.add_graph(model, example_data)
+
     epochs = 10
     best_acc = 0.0
     for epoch in range(epochs):

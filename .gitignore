@@ -1,2 +1,18 @@
 # --- IDE / 编辑器 ---
 .vscode/
+
+# --- 模型权重（运行 traditional_machine_learning_models.py 可重新生成）---
+part1/models/*.pkl
+part2/best_mnist_cnn.pth
+
+# --- 数据集（MNIST 首次运行 cnn_training.py 会自动下载）---
+part2/data/MNIST/raw/*
+
+# --- TensorBoard 日志 ---
+part2/runs/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
