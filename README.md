@@ -1,6 +1,6 @@
 # ML Experiments
 
-两个实验：传统分类器用于油气管道腐蚀预测，以及基于 CNN 的手写数字识别（MNIST）。
+两个实验：传统分类器用于油气管道腐蚀预测，以及基于 CNN 的手写数字识别（MNIST）。第二个实验除了命令行推理，还带一个可以在浏览器里上手试的 [Web 演示](part2/webapp/README.md)。
 
 ---
 
@@ -82,6 +82,27 @@ python predict_digit.py path/to/your_digit.png
 - 若图片为白底黑字则自动反色（转为 MNIST 的黑底白字格式）
 - 用 MNIST 统计量（mean=0.1307, std=0.3081）归一化
 - 显示预测结果及概率柱状图
+
+### Web 演示（`part2/webapp/`）
+
+不用敲命令行，在浏览器里直接看模型工作：上传图片，或者用鼠标在画板上写一个数字，右侧实时给出识别结果、置信度、模型实际看到的 28×28 输入和 10 类概率分布。
+
+![界面预览](part2/webapp/docs/preview.png)
+
+**运行**（需要先有 `part2/best_mnist_cnn.pth`，即上面的训练产物）：
+
+```bash
+cd part2/webapp
+python app.py
+```
+
+然后打开 <http://127.0.0.1:5000>。
+
+- 三种输入：点选 / 拖入 / Ctrl+V 粘贴图片、画板手写（抬笔 260 ms 自动识别）、随机抽一张测试集样本
+- 接口：`GET /api/health`、`POST /api/predict`、`GET /api/example`
+- 预处理和 `predict_digit.py` 不同：按 MNIST 的原始制作方式先裁笔画包围盒，再等比缩放到 20×20、按质心居中到 28×28，对画板和手机照片更稳
+
+实现细节和接口说明见 [part2/webapp/README.md](part2/webapp/README.md)。
 
 ### 数据加载器
 
