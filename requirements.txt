@@ -13,6 +13,10 @@ torchvision>=0.15.0
 Pillow>=10.0.0
 tensorboard>=2.13.0
 
+# Part 2 — Web 演示 (part2/webapp)
+
+Flask>=3.0.0
+
 # Part 2 — 可选: 加速 IDX 文件解析
 
 # idx2numpy

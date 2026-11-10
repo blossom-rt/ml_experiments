@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手写数字识别 · CNN 演示</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">28</span>
+    <div class="titles">
+      <h1>手写数字识别</h1>
+      <p>PyTorch CNN · MNIST · 测试集 99.58%</p>
+    </div>
+  </div>
+  <span class="badge" id="device">连接中…</span>
+</header>
+
+<main class="layout">
+
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab is-on" data-panel="upload" role="tab" aria-selected="true">上传图片</button>
+      <button class="tab" data-panel="draw" role="tab" aria-selected="false">手写画板</button>
+    </div>
+
+    <div class="panel is-on" id="panel-upload">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/*" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+        </svg>
+        <strong>点击选择图片</strong>
+        <span>也可以把图片拖进来，或者直接 Ctrl+V 粘贴</span>
+      </label>
+      <p class="try">没有现成图片？<button class="link" id="try" type="button">试一个测试集样本</button></p>
+      <figure class="source" id="source" hidden>
+        <img id="source-img" alt="待识别图片">
+        <figcaption id="source-meta"></figcaption>
+      </figure>
+    </div>
+
+    <div class="panel" id="panel-draw">
+      <div class="board">
+        <canvas id="canvas" aria-label="手写画板"></canvas>
+        <p class="ghost-hint" id="hint">用鼠标或手指写一个数字</p>
+      </div>
+      <div class="tools">
+        <label class="slider">
+          <span>笔粗</span>
+          <input type="range" id="width" min="10" max="40" step="2" value="22">
+        </label>
+        <button class="btn ghost" id="clear" type="button">清空</button>
+        <button class="btn solid" id="recognize" type="button">识别</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card result">
+    <div class="headline">
+      <div>
+        <p class="label">识别结果</p>
+        <p class="digit is-empty" id="digit">?</p>
+      </div>
+      <div class="confidence">
+        <p class="label">置信度</p>
+        <p class="value" id="confidence">–</p>
+        <div class="meter"><span id="meter"></span></div>
+      </div>
+    </div>
+
+    <div class="preview">
+      <img id="preview" alt="模型实际看到的 28×28 输入" hidden>
+      <p id="preview-hint">识别后在这里显示模型实际看到的 28×28 图像</p>
+    </div>
+
+    <ul class="bars" id="bars"></ul>
+
+    <p class="status" id="status" role="status">准备好后，上传图片或画一个数字</p>
+  </section>
+
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
